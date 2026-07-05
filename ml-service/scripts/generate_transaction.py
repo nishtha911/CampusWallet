@@ -1,104 +1,114 @@
-# algorithm to generate realistc synthetic student transactions
 import pandas as pd
 import random
 from datetime import datetime, timedelta
 
-# stores all transactions
 transactions = []
 
-# descs and whether they are wants or needs
 transaction_data = {
     "Food": [
         ("Mess Lunch", False),
+        ("Groceries", False),
         ("Pizza", True),
-        ("Starbucks Coffee", True),
         ("Burger", True),
-        ("Groceries", False)
+        ("Coffee", True)
     ],
     "Transport": [
         ("Bus Pass", False),
         ("Metro Card", False),
         ("Auto Fare", False),
-        ("Uber Ride", True),
-        ("Train Ticket", False)
+        ("Train Ticket", False),
+        ("Uber Ride", True)
     ],
     "Books": [
         ("DSA Textbook", False),
+        ("Python Book", False),
         ("Notebook", False),
         ("Lab Manual", False),
-        ("Python Book", False),
         ("Stationery", False)
     ],
     "Entertainment": [
         ("Movie Ticket", True),
-        ("Spotify Subscription", True),
         ("Netflix Subscription", True),
+        ("Spotify Subscription", True),
         ("Gaming", True),
         ("Concert Ticket", True)
     ],
-
     "Shopping": [
         ("Clothes", True),
         ("Accessories", True),
-        ("Electronics", True),
-        ("Books", False),
-        ("Stationery", False)
+        ("Electronics", True)
     ],
     "Fees": [
         ("Tuition Fee", False),
-        ("Hostel Fee", False),
-        ("Exam Fee", False),
-        ("Lab Fee", False),
-        ("Library Fee", False)
+        ("Exam Fee", False)
     ]
-
 }
 
-# realistic amount ranges per category
 amount_ranges = {
     "Food": (50, 500),
     "Transport": (20, 300),
     "Books": (100, 2000),
-    "Entertainment": (100, 1000),
-    "Shopping": (20, 10000),
-    "Fees": (1000, 200000)
+    "Entertainment": (100, 2000),
+    "Shopping": (200, 10000),
+    "Fees": (500, 50000)
 }
 
-# create 5 users
+transaction_id = 1
+
 for user_id in range(1, 2001):
 
-    number_of_transactions = random.randint(10, 20)
-
+    number_of_transactions = random.randint(10, 25)
 
     for _ in range(number_of_transactions):
-        category = random.choice(list(transaction_data.keys()))
+
+        category = random.choice(
+            list(transaction_data.keys())
+        )
+
         description, is_want = random.choice(
             transaction_data[category]
         )
+
         minimum, maximum = amount_ranges[category]
-        amount = round(random.uniform(minimum, maximum), 2)
+
+        amount = random.randint(
+            minimum,
+            maximum
+        )
+
         days_ago = random.randint(0, 180)
+
         transaction_date = (
-            datetime.now() - timedelta(days=days_ago)
-        ).strftime("%Y-%m-%d")
-        transaction = {
+            datetime.now()
+            - timedelta(days=days_ago)
+        ).date()
+
+        payment_mode = random.choices(
+            ["UPI", "Cash", "Card"],
+            weights=[70, 10, 20]
+        )[0]
+
+        created_at = datetime.now()
+
+        transactions.append({
+            "id": transaction_id,
             "user_id": user_id,
             "amount": amount,
             "description": description,
             "category": category,
             "is_want": is_want,
+            "created_at": created_at,
             "date": transaction_date,
-            "payment_mode": random.choice(["UPI", "Card", "Cash"]),
-        }
-        transactions.append(transaction)
+            "payment_mode": payment_mode
+        })
 
-# Convert list to table
+        transaction_id += 1
+
 df = pd.DataFrame(transactions)
 
-# Save as CSV
 df.to_csv(
     "data/transactions.csv",
     index=False
 )
 
-print("Synthetic transactions generated successfully.")
+print("Transactions generated successfully.")
