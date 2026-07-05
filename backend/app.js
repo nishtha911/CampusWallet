@@ -1,9 +1,12 @@
-const express = require("express");
-const cors = require("cors");
+import express from "express";
+import cors from "cors";
+import transactionRoutes from "./src/routes/transactionRoutes.js";
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-module.exports = app;
+app.use("/api", transactionRoutes);
+
+export default app;
