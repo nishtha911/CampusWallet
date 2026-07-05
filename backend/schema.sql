@@ -2,7 +2,13 @@ CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
     email VARCHAR(255) UNIQUE NOT NULL,
     name VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT NOW()
+    created_at TIMESTAMP DEFAULT NOW(),
+    age INTEGER,
+    gender VARCHAR(20),
+    year_in_school VARCHAR(20),
+    major VARCHAR(100),
+    monthly_income DECIMAL(10,2),
+    financial_aid DECIMAL(10,2)
 );
 CREATE TABLE IF NOT EXISTS transactions (
     id SERIAL PRIMARY KEY,
@@ -12,7 +18,8 @@ CREATE TABLE IF NOT EXISTS transactions (
     category VARCHAR(50),
     is_want BOOLEAN,
     created_at TIMESTAMP DEFAULT NOW(),
-    date DATE NOT NULL
+    date DATE NOT NULL,
+    payment_mode VARCHAR(20)
 );
 
 CREATE TABLE IF NOT EXISTS cohort_data (

@@ -35,7 +35,23 @@ transaction_data = {
         ("Netflix Subscription", True),
         ("Gaming", True),
         ("Concert Ticket", True)
+    ],
+
+    "Shopping": [
+        ("Clothes", True),
+        ("Accessories", True),
+        ("Electronics", True),
+        ("Books", False),
+        ("Stationery", False)
+    ],
+    "Fees": [
+        ("Tuition Fee", False),
+        ("Hostel Fee", False),
+        ("Exam Fee", False),
+        ("Lab Fee", False),
+        ("Library Fee", False)
     ]
+
 }
 
 # realistic amount ranges per category
@@ -43,13 +59,16 @@ amount_ranges = {
     "Food": (50, 500),
     "Transport": (20, 300),
     "Books": (100, 2000),
-    "Entertainment": (100, 1000)
+    "Entertainment": (100, 1000),
+    "Shopping": (20, 10000),
+    "Fees": (1000, 200000)
 }
 
 # create 5 users
-for user_id in range(1, 6):
+for user_id in range(1, 2001):
 
     number_of_transactions = random.randint(10, 20)
+
 
     for _ in range(number_of_transactions):
         category = random.choice(list(transaction_data.keys()))
@@ -68,7 +87,8 @@ for user_id in range(1, 6):
             "description": description,
             "category": category,
             "is_want": is_want,
-            "date": transaction_date
+            "date": transaction_date,
+            "payment_mode": random.choice(["UPI", "Card", "Cash"]),
         }
         transactions.append(transaction)
 
