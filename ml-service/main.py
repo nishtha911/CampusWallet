@@ -7,6 +7,7 @@ app = FastAPI()
 vectorizer = joblib.load("models/vectorizer.pkl")
 model = joblib.load("models/classifier.pkl")
 anomaly_model = joblib.load("models/anomaly_model.pkl")
+forecast_model = joblib.load("models/forecast_model.pkl")
 
 
 class Transaction(BaseModel):
@@ -15,6 +16,8 @@ class Transaction(BaseModel):
 class Amount(BaseModel):
     amount: float
 
+class ForecastRequest(BaseModel):
+    month: int
 
 @app.get("/")
 def home():
@@ -47,4 +50,16 @@ def detect_anomaly(transaction: Amount):
     return {
         "amount": transaction.amount,
         "is_anomaly": bool(prediction == -1)
+    }
+
+@app.post("/forecast")
+def forecast(request: ForecastRequest):
+
+    prediction = forecast_model.predict(
+        [[request.month]]
+    )[0]
+
+    return {
+        "month": request.month,
+        "predicted_spending": round(float(prediction), 2)
     }
