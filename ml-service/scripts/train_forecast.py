@@ -5,21 +5,23 @@ from sklearn.linear_model import LinearRegression
 
 df = pd.read_csv("data/transactions.csv")
 
-# Convert date column
 df["date"] = pd.to_datetime(df["date"])
 
-# Extract month number
 df["month"] = df["date"].dt.month
 
-# Total spending per month
+current_month = pd.Timestamp.today().month
+
+df = df[df["month"] != current_month]
+
 monthly = (
     df.groupby("month")["amount"]
       .sum()
       .reset_index()
 )
 
-X = monthly[["month"]]
+print(monthly)
 
+X = monthly[["month"]]
 y = monthly["amount"]
 
 model = LinearRegression()
