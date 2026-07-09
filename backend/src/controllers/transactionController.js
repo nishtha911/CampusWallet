@@ -1,4 +1,8 @@
 import pool from "../config/db.js";
+import {
+    classifyTransaction,
+    detectAnomaly
+} from "../services/mlService.js";
 
 export const getTransactions = async (req , res ) => {
     try {
@@ -25,10 +29,12 @@ export const createTransaction = async (req, res) => {
       amount,
       description,
       category,
-      is_want,
       date,
       payment_mode,
     } = req.body;
+
+    const classification = await classifyTransaction(description);
+    const anomaly = await detectAnomaly(amount);
 
     const result = await pool.query(
       `
@@ -42,19 +48,24 @@ export const createTransaction = async (req, res) => {
         amount,
         description,
         category,
-        is_want,
+        classification.is_want,
         date,
         payment_mode,
       ]
     );
 
-    res.status(201).json(result.rows[0]);
+    res.status(201).json({
+      transaction: result.rows[0],
+      anomaly,
+    });
+
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server Error" });
+    res.status(500).json({
+      message: "Server Error"
+    });
   }
 };
-
 export const updateTransaction = async (req, res) => {
   try {
     const { id } = req.params;
