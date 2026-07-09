@@ -25,3 +25,16 @@ export const detectAnomaly = async (amount) => {
 
     return response.data;
 };
+
+export const forecastSpending = async (month) => {
+
+    const response = await axios.post(
+        `${ML_URL}/forecast`,
+        {
+            month
+        }
+    );
+
+    return response.data;
+
+};

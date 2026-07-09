@@ -1,8 +1,10 @@
 import pool from "../config/db.js";
 import {
     classifyTransaction,
-    detectAnomaly
+    detectAnomaly,
+    forecastSpending
 } from "../services/mlService.js";
+
 
 export const getTransactions = async (req , res ) => {
     try {
@@ -142,4 +144,80 @@ export const deleteTransaction = async (req, res) => {
     console.error(error);
     res.status(500).json({ message: "Server Error" });
   }
+};
+
+export const getInsights = async (req, res) => {
+
+    try {
+
+        const { userId } = req.params;
+
+        const transactions = await pool.query(
+            `
+            SELECT *
+            FROM transactions
+            WHERE user_id=$1
+            `,
+            [userId]
+        );
+
+        const rows = transactions.rows;
+
+        const totalTransactions = rows.length;
+
+        const totalSpending = rows.reduce(
+            (sum, transaction) =>
+                sum + Number(transaction.amount),
+            0
+        );
+
+        const wantTransactions = rows.filter(
+            transaction => transaction.is_want
+        ).length;
+
+        const needTransactions = rows.filter(
+            transaction => !transaction.is_want
+        ).length;
+
+        const largestTransaction = Math.max(
+            ...rows.map(
+                transaction => Number(transaction.amount)
+            )
+        );
+
+        const month = new Date().getMonth() + 1;
+
+        const forecast = await forecastSpending(month);
+
+        res.status(200).json({
+
+            total_transactions: totalTransactions,
+
+            total_spending: totalSpending,
+
+            want_transactions: wantTransactions,
+
+            need_transactions: needTransactions,
+
+            largest_transaction: largestTransaction,
+
+            forecast_next_month:
+                forecast.predicted_spending
+
+        });
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        res.status(500).json({
+
+            message: "Server Error"
+
+        });
+
+    }
+
 };
