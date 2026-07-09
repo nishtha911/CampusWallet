@@ -4,7 +4,8 @@ import {
   createTransaction,
   updateTransaction,
   deleteTransaction,
-  getInsights
+  getInsights,
+  getBenchmarks
 } from "../controllers/transactionController.js";
 
 const router = express.Router();
@@ -14,5 +15,6 @@ router.post("/transactions", createTransaction);
 router.put("/transactions/:id", updateTransaction);
 router.delete("/transactions/:id", deleteTransaction);
 router.get("/insights/:userId", getInsights);
+router.get("/benchmarks", getBenchmarks);
 
 export default router;

@@ -221,3 +221,36 @@ export const getInsights = async (req, res) => {
     }
 
 };
+
+export const getBenchmarks = async (req, res) => {
+
+    try {
+
+        const result = await pool.query(
+            `
+            SELECT
+                category,
+                avg_spending,
+                median_spending,
+                percentile_25,
+                percentile_75
+            FROM cohort_data
+            ORDER BY category;
+            `
+        );
+
+        res.status(200).json(result.rows);
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+        res.status(500).json({
+            message:"Server Error"
+        });
+
+    }
+
+};
