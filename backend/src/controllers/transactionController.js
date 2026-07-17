@@ -226,18 +226,45 @@ export const getBenchmarks = async (req, res) => {
 
     try {
 
-        const result = await pool.query(
-            `
+        const result = await pool.query(`
             SELECT
                 category,
-                avg_spending,
-                median_spending,
-                percentile_25,
-                percentile_75
-            FROM cohort_data
+                ROUND(AVG(total_spent),2) AS avg_spending,
+
+                PERCENTILE_CONT(0.5)
+                WITHIN GROUP
+                (ORDER BY total_spent)
+                AS median_spending,
+
+                PERCENTILE_CONT(0.25)
+                WITHIN GROUP
+                (ORDER BY total_spent)
+                AS percentile_25,
+
+                PERCENTILE_CONT(0.75)
+                WITHIN GROUP
+                (ORDER BY total_spent)
+                AS percentile_75
+
+            FROM (
+
+                SELECT
+                    user_id,
+                    category,
+                    SUM(amount) AS total_spent
+
+                FROM transactions
+
+                GROUP BY
+                    user_id,
+                    category
+
+            ) t
+
+            GROUP BY category
+
             ORDER BY category;
-            `
-        );
+        `);
 
         res.status(200).json(result.rows);
 
