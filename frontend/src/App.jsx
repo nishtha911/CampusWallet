@@ -1,14 +1,17 @@
-import Navbar from "./components/Navbar";
+import Sidebar from "./components/Sidebar";
 import Dashboard from "./pages/Dashboard";
+import "./index.css";
 
 function App() {
+  return (
+    <div className="app">
+      <Sidebar />
 
-    return (
-        <>
-            <Navbar />
-            <Dashboard />
-        </>
-    );
+      <div className="main">
+        <Dashboard />
+      </div>
+    </div>
+  );
 }
 
 export default App;

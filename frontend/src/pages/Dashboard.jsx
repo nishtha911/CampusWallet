@@ -1,40 +1,19 @@
-import { useEffect, useState } from "react";
-import api from "../services/api";
+import Navbar from "../components/Navbar";
 import SummaryCard from "../components/SummaryCard";
 
 function Dashboard() {
+  return (
+    <>
+      <Navbar />
 
-    const [transactions, setTransactions] = useState([]);
-    useEffect(() => {
-
-        fetchTransactions();
-
-    }, []);
-
-    async function fetchTransactions() {
-        try {
-            const response = await api.get("/transactions");
-            setTransactions(response.data);
-        }
-
-        catch (error) {
-            console.log(error);
-        }
-    }
-
-    return (
-        <div
-            style={{
-                padding: "30px"
-            }}
-        >
-            <h1>Dashboard</h1>
-            <SummaryCard
-                title="Transactions"
-                value={transactions.length}
-            />
-        </div>
-    );
+      <div className="cards">
+        <SummaryCard title="Transactions" value="35,348" />
+        <SummaryCard title="Users" value="2,000" />
+        <SummaryCard title="Categories" value="8" />
+        <SummaryCard title="UPI Payments" value="70%" />
+      </div>
+    </>
+  );
 }
 
 export default Dashboard;
