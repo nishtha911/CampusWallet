@@ -1,9 +1,29 @@
+import { useNavigate } from "react-router-dom";
+
 function Navbar() {
+  const navigate = useNavigate();
+
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+
+    navigate("/");
+  };
+
   return (
     <div className="navbar">
-      <h1>Dashboard</h1>
+      <div>
+        <h2>CampusWallet</h2>
 
-      <p>Welcome back 👋</p>
+        <p>
+          Welcome,
+          {user?.name}
+        </p>
+      </div>
+
+      <button onClick={logout}>Logout</button>
     </div>
   );
 }

@@ -1,3 +1,4 @@
 .env
 implementation_plan.md
 .vscode
+venv/
