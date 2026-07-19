@@ -1,16 +1,43 @@
+import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import SummaryCard from "../components/SummaryCard";
+import api from "../services/api";
 
 function Dashboard() {
+  const [summary, setSummary] = useState(null);
+
+  useEffect(() => {
+    fetchSummary();
+  }, []);
+
+  const fetchSummary = async () => {
+    try {
+      const response = await api.get("/users/me/summary");
+      setSummary(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  if (!summary) {
+    return <h2>Loading...</h2>;
+  }
+
   return (
     <>
       <Navbar />
 
       <div className="cards">
-        <SummaryCard title="Transactions" value="35,348" />
-        <SummaryCard title="Users" value="2,000" />
-        <SummaryCard title="Categories" value="8" />
-        <SummaryCard title="UPI Payments" value="70%" />
+        <SummaryCard title="Transactions" value={summary.totalTransactions} />
+
+        <SummaryCard title="Total Spending" value={`₹${summary.totalSpent}`} />
+
+        <SummaryCard
+          title="Average Transaction"
+          value={`₹${summary.averageTransaction}`}
+        />
+
+        <SummaryCard title="Top Category" value={summary.topCategory} />
       </div>
     </>
   );

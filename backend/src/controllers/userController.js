@@ -5,13 +5,13 @@ export const getUserById = async (req, res) => {
     const id = req.user.id;
 
     const result = await pool.query(
-      "SELECT * FROM users WHERE id = $1",
+      "SELECT id,name,email,created_at FROM users WHERE id=$1",
       [id]
     );
 
     if (result.rows.length === 0) {
       return res.status(404).json({
-        message: "User not found"
+        message: "User not found",
       });
     }
 
@@ -20,7 +20,7 @@ export const getUserById = async (req, res) => {
     console.error(error);
 
     res.status(500).json({
-      message: "Server Error"
+      message: "Server Error",
     });
   }
 };
@@ -30,7 +30,12 @@ export const getUserTransactions = async (req, res) => {
     const id = req.user.id;
 
     const result = await pool.query(
-      "SELECT * FROM transactions WHERE user_id = $1 ORDER BY date DESC",
+      `
+      SELECT *
+      FROM transactions
+      WHERE user_id=$1
+      ORDER BY date DESC
+      `,
       [id]
     );
 
@@ -39,7 +44,7 @@ export const getUserTransactions = async (req, res) => {
     console.error(error);
 
     res.status(500).json({
-      message: "Server Error"
+      message: "Server Error",
     });
   }
 };
@@ -52,10 +57,10 @@ export const getUserSummary = async (req, res) => {
       `
       SELECT
         COUNT(*) AS total_transactions,
-        COALESCE(SUM(amount), 0) AS total_spent,
-        COALESCE(ROUND(AVG(amount), 2), 0) AS average_transaction
+        COALESCE(SUM(amount),0) AS total_spent,
+        COALESCE(ROUND(AVG(amount),2),0) AS average_transaction
       FROM transactions
-      WHERE user_id = $1
+      WHERE user_id=$1
       `,
       [id]
     );
@@ -66,7 +71,7 @@ export const getUserSummary = async (req, res) => {
         category,
         COUNT(*) AS frequency
       FROM transactions
-      WHERE user_id = $1
+      WHERE user_id=$1
       GROUP BY category
       ORDER BY frequency DESC
       LIMIT 1
@@ -75,26 +80,23 @@ export const getUserSummary = async (req, res) => {
     );
 
     res.status(200).json({
-      totalTransactions:
-        Number(
-          summary.rows[0].total_transactions
-        ),
-      totalSpent:
-        Number(
-          summary.rows[0].total_spent
-        ),
-      averageTransaction:
-        Number(
-          summary.rows[0].average_transaction
-        ),
+      totalTransactions: Number(
+        summary.rows[0].total_transactions
+      ),
+      totalSpent: Number(
+        summary.rows[0].total_spent
+      ),
+      averageTransaction: Number(
+        summary.rows[0].average_transaction
+      ),
       topCategory:
-        topCategory.rows[0]?.category || null
+        topCategory.rows[0]?.category ?? "None",
     });
   } catch (error) {
     console.error(error);
 
     res.status(500).json({
-      message: "Server Error"
+      message: "Server Error",
     });
   }
 };

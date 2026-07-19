@@ -22,20 +22,29 @@ function Login() {
 
     try {
       const response = await api.post("/auth/login", formData);
-      const { token } = response.data;
+
+      const { token, user } = response.data;
 
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
+
       alert("Login Successful!");
+
       navigate("/dashboard");
+
     } catch (error) {
-      alert(error.response?.data?.message || "Login Failed");
+      console.error(error);
+
+      alert(
+        error.response?.data?.message || "Login Failed"
+      );
     }
   };
 
   return (
     <div className="login-container">
       <h1>Login</h1>
+
       <form onSubmit={handleSubmit}>
         <input
           type="email"
@@ -44,6 +53,7 @@ function Login() {
           value={formData.email}
           onChange={handleChange}
         />
+
         <input
           type="password"
           name="password"
@@ -51,7 +61,11 @@ function Login() {
           value={formData.password}
           onChange={handleChange}
         />
-        <button type="submit">Login</button>
+
+        <button type="submit">
+          Login
+        </button>
+
         <p>
           Don't have an account?
           <Link to="/register"> Register</Link>
