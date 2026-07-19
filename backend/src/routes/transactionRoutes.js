@@ -5,16 +5,17 @@ import {
   updateTransaction,
   deleteTransaction,
   getInsights,
-  getBenchmarks
+  getBenchmarks,
 } from "../controllers/transactionController.js";
+import { authenticateToken } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
 router.get("/transactions", getTransactions);
-router.post("/transactions", createTransaction);
-router.put("/transactions/:id", updateTransaction);
-router.delete("/transactions/:id", deleteTransaction);
-router.get("/insights/:userId", getInsights);
+router.post("/transactions", authenticateToken, createTransaction);
+router.put("/transactions/:id", authenticateToken, updateTransaction);
+router.delete("/transactions/:id", authenticateToken, deleteTransaction);
+router.get("/insights", authenticateToken, getInsights);
 router.get("/benchmarks", getBenchmarks);
 
 export default router;

@@ -1,39 +1,29 @@
 import pool from "../config/db.js";
 import {
-    classifyTransaction,
-    detectAnomaly,
-    forecastSpending
+  classifyTransaction,
+  detectAnomaly,
+  forecastSpending,
 } from "../services/mlService.js";
 
+export const getTransactions = async (req, res) => {
+  try {
+    const result = await pool.query("SELECT * FROM transactions");
 
-export const getTransactions = async (req , res ) => {
-    try {
-        const  result = await pool.query(
-            "SELECT * FROM transactions"
-        );
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.error(error);
 
-        res.status(200).json(result.rows);
-        
-    } catch (error) {
-        console.error(error);
-
-        res.status(500).json({
-            message: "Server Error",
-        });
-        
-    }
+    res.status(500).json({
+      message: "Server Error",
+    });
+  }
 };
 
 export const createTransaction = async (req, res) => {
   try {
-    const {
-      user_id,
-      amount,
-      description,
-      category,
-      date,
-      payment_mode,
-    } = req.body;
+    const { amount, description, category, date, payment_mode } = req.body;
+
+    const user_id = req.user.id;
 
     const classification = await classifyTransaction(description);
     const anomaly = await detectAnomaly(amount);
@@ -53,18 +43,17 @@ export const createTransaction = async (req, res) => {
         classification.is_want,
         date,
         payment_mode,
-      ]
+      ],
     );
 
     res.status(201).json({
       transaction: result.rows[0],
       anomaly,
     });
-
   } catch (error) {
     console.error(error);
     res.status(500).json({
-      message: "Server Error"
+      message: "Server Error",
     });
   }
 };
@@ -72,37 +61,24 @@ export const updateTransaction = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const {
-      amount,
-      description,
-      category,
-      is_want,
-      date,
-      payment_mode,
-    } = req.body;
+    const { amount, description, category, is_want, date, payment_mode } =
+      req.body;
 
     const result = await pool.query(
       `
       UPDATE transactions
-      SET
-        amount = $1,
-        description = $2,
-        category = $3,
-        is_want = $4,
-        date = $5,
-        payment_mode = $6
-      WHERE id = $7
-      RETURNING *;
+        SET
+        amount=$1,
+        description=$2,
+        category=$3,
+        is_want=$4,
+        date=$5,
+        payment_mode=$6
+        WHERE id=$7
+        AND user_id=$8
+        RETURNING *;
       `,
-      [
-        amount,
-        description,
-        category,
-        is_want,
-        date,
-        payment_mode,
-        id,
-      ]
+      [amount, description, category, is_want, date, payment_mode, id, userId],
     );
 
     if (result.rows.length === 0) {
@@ -125,10 +101,11 @@ export const deleteTransaction = async (req, res) => {
     const result = await pool.query(
       `
       DELETE FROM transactions
-      WHERE id = $1
+      WHERE id=$1
+      AND user_id=$2
       RETURNING *;
       `,
-      [id]
+      [id],
     );
 
     if (result.rows.length === 0) {
@@ -147,86 +124,68 @@ export const deleteTransaction = async (req, res) => {
 };
 
 export const getInsights = async (req, res) => {
+  try {
+    const userId = req.user.id;
 
-    try {
-
-        const { userId } = req.params;
-
-        const transactions = await pool.query(
-            `
+    const transactions = await pool.query(
+      `
             SELECT *
             FROM transactions
             WHERE user_id=$1
             `,
-            [userId]
-        );
+      [userId],
+    );
 
-        const rows = transactions.rows;
+    const rows = transactions.rows;
 
-        const totalTransactions = rows.length;
+    const totalTransactions = rows.length;
 
-        const totalSpending = rows.reduce(
-            (sum, transaction) =>
-                sum + Number(transaction.amount),
-            0
-        );
+    const totalSpending = rows.reduce(
+      (sum, transaction) => sum + Number(transaction.amount),
+      0,
+    );
 
-        const wantTransactions = rows.filter(
-            transaction => transaction.is_want
-        ).length;
+    const wantTransactions = rows.filter(
+      (transaction) => transaction.is_want,
+    ).length;
 
-        const needTransactions = rows.filter(
-            transaction => !transaction.is_want
-        ).length;
+    const needTransactions = rows.filter(
+      (transaction) => !transaction.is_want,
+    ).length;
 
-        const largestTransaction = Math.max(
-            ...rows.map(
-                transaction => Number(transaction.amount)
-            )
-        );
+    const largestTransaction = Math.max(
+      ...rows.map((transaction) => Number(transaction.amount)),
+    );
 
-        const month = new Date().getMonth() + 1;
+    const month = new Date().getMonth() + 1;
 
-        const forecast = await forecastSpending(month);
+    const forecast = await forecastSpending(month);
 
-        res.status(200).json({
+    res.status(200).json({
+      total_transactions: totalTransactions,
 
-            total_transactions: totalTransactions,
+      total_spending: totalSpending,
 
-            total_spending: totalSpending,
+      want_transactions: wantTransactions,
 
-            want_transactions: wantTransactions,
+      need_transactions: needTransactions,
 
-            need_transactions: needTransactions,
+      largest_transaction: largestTransaction,
 
-            largest_transaction: largestTransaction,
+      forecast_next_month: forecast.predicted_spending,
+    });
+  } catch (error) {
+    console.error(error);
 
-            forecast_next_month:
-                forecast.predicted_spending
-
-        });
-
-    }
-
-    catch (error) {
-
-        console.error(error);
-
-        res.status(500).json({
-
-            message: "Server Error"
-
-        });
-
-    }
-
+    res.status(500).json({
+      message: "Server Error",
+    });
+  }
 };
 
 export const getBenchmarks = async (req, res) => {
-
-    try {
-
-        const result = await pool.query(`
+  try {
+    const result = await pool.query(`
             SELECT
                 category,
                 ROUND(AVG(total_spent),2) AS avg_spending,
@@ -266,18 +225,12 @@ export const getBenchmarks = async (req, res) => {
             ORDER BY category;
         `);
 
-        res.status(200).json(result.rows);
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.error(error);
 
-    }
-
-    catch(error){
-
-        console.error(error);
-
-        res.status(500).json({
-            message:"Server Error"
-        });
-
-    }
-
+    res.status(500).json({
+      message: "Server Error",
+    });
+  }
 };

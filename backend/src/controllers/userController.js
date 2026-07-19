@@ -2,7 +2,7 @@ import pool from "../config/db.js";
 
 export const getUserById = async (req, res) => {
   try {
-    const { id } = req.params;
+    const id = req.user.id;
 
     const result = await pool.query(
       "SELECT * FROM users WHERE id = $1",
@@ -27,7 +27,7 @@ export const getUserById = async (req, res) => {
 
 export const getUserTransactions = async (req, res) => {
   try {
-    const { id } = req.params;
+    const id = req.user.id;
 
     const result = await pool.query(
       "SELECT * FROM transactions WHERE user_id = $1 ORDER BY date DESC",
@@ -46,7 +46,7 @@ export const getUserTransactions = async (req, res) => {
 
 export const getUserSummary = async (req, res) => {
   try {
-    const { id } = req.params;
+    const id = req.user.id;
 
     const summary = await pool.query(
       `
