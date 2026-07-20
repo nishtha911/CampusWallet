@@ -7,10 +7,25 @@ import {
 
 export const getTransactions = async (req, res) => {
   try {
-    const result = await pool.query(
-      "SELECT * FROM transactions WHERE user_id = $1",
-      [req.user.id]
-    );
+    const { search, sortBy = 'date', order = 'desc' } = req.query;
+    
+    let query = "SELECT * FROM transactions WHERE user_id = $1";
+    const values = [req.user.id];
+    let paramIndex = 2;
+
+    if (search) {
+      query += ` AND (description ILIKE $${paramIndex} OR category ILIKE $${paramIndex})`;
+      values.push(`%${search}%`);
+      paramIndex++;
+    }
+
+    const allowedSortColumns = ['date', 'amount', 'category', 'created_at'];
+    const safeSortBy = allowedSortColumns.includes(sortBy) ? sortBy : 'date';
+    const safeOrder = order.toLowerCase() === 'asc' ? 'ASC' : 'DESC';
+
+    query += ` ORDER BY ${safeSortBy} ${safeOrder}`;
+
+    const result = await pool.query(query, values);
 
     res.status(200).json(result.rows);
   } catch (error) {

@@ -4,14 +4,22 @@ import api from "../services/api";
 
 function Transactions() {
   const [transactions, setTransactions] = useState([]);
+  const [search, setSearch] = useState("");
+  const [sortBy, setSortBy] = useState("date");
+  const [order, setOrder] = useState("desc");
 
   useEffect(() => {
     fetchTransactions();
-  }, []);
+  }, [search, sortBy, order]);
 
   const fetchTransactions = async () => {
     try {
-      const response = await api.get("/transactions");
+      const params = new URLSearchParams();
+      if (search) params.append("search", search);
+      params.append("sortBy", sortBy);
+      params.append("order", order);
+
+      const response = await api.get(`/transactions?${params.toString()}`);
       setTransactions(response.data);
     } catch (error) {
       console.error(error);
@@ -60,6 +68,33 @@ function Transactions() {
 
       <div className="container">
         <h1>My Transactions</h1>
+
+        <div className="transactions-controls">
+          <input
+            type="text"
+            className="search-input"
+            placeholder="Search descriptions or categories..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          <select 
+            className="sort-select" 
+            value={sortBy} 
+            onChange={(e) => setSortBy(e.target.value)}
+          >
+            <option value="date">Date</option>
+            <option value="amount">Amount</option>
+            <option value="category">Category</option>
+          </select>
+          <select 
+            className="sort-select" 
+            value={order} 
+            onChange={(e) => setOrder(e.target.value)}
+          >
+            <option value="desc">Descending</option>
+            <option value="asc">Ascending</option>
+          </select>
+        </div>
 
         <table>
           <thead>
