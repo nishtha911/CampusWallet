@@ -32,6 +32,8 @@ function Navbar() {
 
         <Link to="/add-transaction">Add Transaction</Link>
 
+        <Link to="/transactions">Transactions</Link>
+
         <button onClick={logout}>Logout</button>
       </div>
     </nav>
