@@ -7,7 +7,10 @@ import {
 
 export const getTransactions = async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM transactions");
+    const result = await pool.query(
+      "SELECT * FROM transactions WHERE user_id = $1",
+      [req.user.id]
+    );
 
     res.status(200).json(result.rows);
   } catch (error) {
@@ -189,41 +192,12 @@ export const getBenchmarks = async (req, res) => {
     const result = await pool.query(`
       SELECT
         category,
-
-        ROUND(AVG(total_spent),2) AS avg_spending,
-
-        PERCENTILE_CONT(0.5)
-        WITHIN GROUP
-        (ORDER BY total_spent)
-        AS median_spending,
-
-        PERCENTILE_CONT(0.25)
-        WITHIN GROUP
-        (ORDER BY total_spent)
-        AS percentile_25,
-
-        PERCENTILE_CONT(0.75)
-        WITHIN GROUP
-        (ORDER BY total_spent)
-        AS percentile_75
-
-      FROM (
-
-        SELECT
-          user_id,
-          category,
-          SUM(amount) AS total_spent
-
-        FROM transactions
-
-        GROUP BY
-          user_id,
-          category
-
-      ) t
-
+        ROUND(AVG(avg_spending), 2) AS avg_spending,
+        ROUND(AVG(median_spending), 2) AS median_spending,
+        ROUND(AVG(percentile_25), 2) AS percentile_25,
+        ROUND(AVG(percentile_75), 2) AS percentile_75
+      FROM cohort_data
       GROUP BY category
-
       ORDER BY category
     `);
 

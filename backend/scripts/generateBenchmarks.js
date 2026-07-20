@@ -78,8 +78,8 @@ const generateBenchmarks = async () => {
           group.month_year,
           group.category,
           average.toFixed(2),
-          percentile25,
           median,
+          percentile25,
           percentile75,
         ]
       );

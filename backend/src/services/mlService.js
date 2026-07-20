@@ -1,40 +1,33 @@
 import axios from "axios";
 
-const ML_URL = "http://127.0.0.1:8000";
+const ML_URL = process.env.ML_URL || "http://127.0.0.1:8000";
 
 export const classifyTransaction = async (description) => {
-
-    const response = await axios.post(
-        `${ML_URL}/classify`,
-        {
-            description
-        }
-    );
-
-    return response.data;
+    try {
+        const response = await axios.post(`${ML_URL}/classify`, { description });
+        return response.data;
+    } catch (error) {
+        console.error("ML classify error:", error.message);
+        return { is_want: false };
+    }
 };
 
 export const detectAnomaly = async (amount) => {
-
-    const response = await axios.post(
-        `${ML_URL}/detect-anomaly`,
-        {
-            amount
-        }
-    );
-
-    return response.data;
+    try {
+        const response = await axios.post(`${ML_URL}/detect-anomaly`, { amount });
+        return response.data;
+    } catch (error) {
+        console.error("ML detectAnomaly error:", error.message);
+        return { is_anomaly: false };
+    }
 };
 
 export const forecastSpending = async (month) => {
-
-    const response = await axios.post(
-        `${ML_URL}/forecast`,
-        {
-            month
-        }
-    );
-
-    return response.data;
-
+    try {
+        const response = await axios.post(`${ML_URL}/forecast`, { month });
+        return response.data;
+    } catch (error) {
+        console.error("ML forecast error:", error.message);
+        return { predicted_spending: 0 };
+    }
 };
