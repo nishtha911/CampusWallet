@@ -1,30 +1,40 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Navbar() {
   const navigate = useNavigate();
-
-  const user = JSON.parse(localStorage.getItem("user"));
 
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
 
-    navigate("/");
+    navigate("/login");
   };
 
   return (
-    <div className="navbar">
-      <div>
-        <h2>CampusWallet</h2>
+    <nav
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        padding: "15px 30px",
+        borderBottom: "1px solid #ddd",
+      }}
+    >
+      <h2>CampusWallet</h2>
 
-        <p>
-          Welcome,
-          {user?.name}
-        </p>
+      <div
+        style={{
+          display: "flex",
+          gap: "15px",
+        }}
+      >
+        <Link to="/dashboard">Dashboard</Link>
+
+        <Link to="/add-transaction">Add Transaction</Link>
+
+        <button onClick={logout}>Logout</button>
       </div>
-
-      <button onClick={logout}>Logout</button>
-    </div>
+    </nav>
   );
 }
 
