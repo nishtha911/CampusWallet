@@ -58,6 +58,9 @@ export const createTransaction = async (req, res) => {
   }
 };
 export const updateTransaction = async (req, res) => {
+
+  const userId = req.user.id;
+
   try {
     const { id } = req.params;
 
@@ -95,6 +98,8 @@ export const updateTransaction = async (req, res) => {
 };
 
 export const deleteTransaction = async (req, res) => {
+
+  const userId = req.user.id;
   try {
     const { id } = req.params;
 
@@ -105,7 +110,7 @@ export const deleteTransaction = async (req, res) => {
       AND user_id=$2
       RETURNING *;
       `,
-      [id],
+      [id, userId],
     );
 
     if (result.rows.length === 0) {
@@ -129,10 +134,10 @@ export const getInsights = async (req, res) => {
 
     const transactions = await pool.query(
       `
-            SELECT *
-            FROM transactions
-            WHERE user_id=$1
-            `,
+      SELECT *
+      FROM transactions
+      WHERE user_id = $1
+      `,
       [userId],
     );
 
@@ -153,9 +158,10 @@ export const getInsights = async (req, res) => {
       (transaction) => !transaction.is_want,
     ).length;
 
-    const largestTransaction = Math.max(
-      ...rows.map((transaction) => Number(transaction.amount)),
-    );
+    const largestTransaction =
+      rows.length > 0
+        ? Math.max(...rows.map((transaction) => Number(transaction.amount)))
+        : 0;
 
     const month = new Date().getMonth() + 1;
 
@@ -163,15 +169,10 @@ export const getInsights = async (req, res) => {
 
     res.status(200).json({
       total_transactions: totalTransactions,
-
       total_spending: totalSpending,
-
       want_transactions: wantTransactions,
-
       need_transactions: needTransactions,
-
       largest_transaction: largestTransaction,
-
       forecast_next_month: forecast.predicted_spending,
     });
   } catch (error) {
@@ -186,44 +187,45 @@ export const getInsights = async (req, res) => {
 export const getBenchmarks = async (req, res) => {
   try {
     const result = await pool.query(`
-            SELECT
-                category,
-                ROUND(AVG(total_spent),2) AS avg_spending,
+      SELECT
+        category,
 
-                PERCENTILE_CONT(0.5)
-                WITHIN GROUP
-                (ORDER BY total_spent)
-                AS median_spending,
+        ROUND(AVG(total_spent),2) AS avg_spending,
 
-                PERCENTILE_CONT(0.25)
-                WITHIN GROUP
-                (ORDER BY total_spent)
-                AS percentile_25,
+        PERCENTILE_CONT(0.5)
+        WITHIN GROUP
+        (ORDER BY total_spent)
+        AS median_spending,
 
-                PERCENTILE_CONT(0.75)
-                WITHIN GROUP
-                (ORDER BY total_spent)
-                AS percentile_75
+        PERCENTILE_CONT(0.25)
+        WITHIN GROUP
+        (ORDER BY total_spent)
+        AS percentile_25,
 
-            FROM (
+        PERCENTILE_CONT(0.75)
+        WITHIN GROUP
+        (ORDER BY total_spent)
+        AS percentile_75
 
-                SELECT
-                    user_id,
-                    category,
-                    SUM(amount) AS total_spent
+      FROM (
 
-                FROM transactions
+        SELECT
+          user_id,
+          category,
+          SUM(amount) AS total_spent
 
-                GROUP BY
-                    user_id,
-                    category
+        FROM transactions
 
-            ) t
+        GROUP BY
+          user_id,
+          category
 
-            GROUP BY category
+      ) t
 
-            ORDER BY category;
-        `);
+      GROUP BY category
+
+      ORDER BY category
+    `);
 
     res.status(200).json(result.rows);
   } catch (error) {
