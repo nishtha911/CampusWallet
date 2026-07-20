@@ -2,16 +2,22 @@ import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import SummaryCard from "../components/SummaryCard";
 import api from "../services/api";
+import PieChart from "../components/PieChart";
+import BarChart from "../components/BarChart";
+import LineChart from "../components/Linechart";
+import Insights from "../components/Insights";
 
 function Dashboard() {
   const [summary, setSummary] = useState(null);
   const [insights, setInsights] = useState(null);
   const [benchmarks, setBenchmarks] = useState([]);
+  const [transactions, setTransactions] = useState([]);
 
   useEffect(() => {
     fetchSummary();
     fetchInsights();
     fetchBenchmarks();
+    fetchTransactions();
   }, []);
 
   const fetchSummary = async () => {
@@ -40,10 +46,20 @@ function Dashboard() {
       console.error(error);
     }
   };
-console.log("summary", summary);
-console.log("insights", insights);
-console.log("benchmarks", benchmarks);
-  if (!summary || !insights ) {
+
+  const fetchTransactions = async () => {
+    try {
+      const response = await api.get("/users/me/transactions");
+
+      setTransactions(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  console.log("summary", summary);
+  console.log("insights", insights);
+  console.log("benchmarks", benchmarks);
+  if (!summary || !insights) {
     return <h2>Loading...</h2>;
   }
 
@@ -52,15 +68,9 @@ console.log("benchmarks", benchmarks);
       <Navbar />
 
       <div className="cards">
-        <SummaryCard
-          title="Transactions"
-          value={summary.totalTransactions}
-        />
+        <SummaryCard title="Transactions" value={summary.totalTransactions} />
 
-        <SummaryCard
-          title="Total Spending"
-          value={`₹${summary.totalSpent}`}
-        />
+        <SummaryCard title="Total Spending" value={`₹${summary.totalSpent}`} />
 
         <SummaryCard
           title="Largest Transaction"
@@ -72,6 +82,8 @@ console.log("benchmarks", benchmarks);
           value={`₹${Math.round(insights.forecast_next_month)}`}
         />
       </div>
+
+      <Insights insights={insights} />
 
       <h2>Category Benchmarks</h2>
 
@@ -94,6 +106,10 @@ console.log("benchmarks", benchmarks);
           ))}
         </tbody>
       </table>
+
+      <PieChart transactions={transactions} />
+      <BarChart transactions={transactions} />
+      <LineChart transactions={transactions} />
     </>
   );
 }
