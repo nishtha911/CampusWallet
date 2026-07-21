@@ -8,6 +8,8 @@ vectorizer = joblib.load("models/vectorizer.pkl")
 model = joblib.load("models/classifier.pkl")
 anomaly_model = joblib.load("models/anomaly_model.pkl")
 forecast_model = joblib.load("models/forecast_model.pkl")
+category_classifier = joblib.load("models/category_classifier.pkl")
+category_vectorizer = joblib.load("models/category_vectorizer.pkl")
 
 
 class Transaction(BaseModel):
@@ -34,10 +36,12 @@ def classify(transaction: Transaction):
     )
 
     prediction = model.predict(description_vector)[0]
-
+    probability = model.predict_proba(description_vector)[0]
+    confidence = float(max(probability))
     return {
         "description": transaction.description,
-        "is_want": bool(prediction)
+        "is_want": bool(prediction),
+        "confidence": round(confidence * 100, 2)
     }
 
 @app.post("/detect-anomaly")
@@ -62,4 +66,17 @@ def forecast(request: ForecastRequest):
     return {
         "month": request.month,
         "predicted_spending": round(float(prediction), 2) #{"month":7,"predicted_spending":20908920.14}
-    } 
+    }
+
+@app.post("/predict-category")
+def predict_category(transaction: Transaction):
+    description_vector = category_vectorizer.transform([transaction.description])
+    prediction = category_classifier.predict(description_vector)[0]
+    probability = category_classifier.predict_proba(description_vector)[0]
+    confidence = float(max(probability))
+
+    return {
+        "description": transaction.description,
+        "category": prediction,
+        "confidence": round(confidence * 100, 2)
+    }
