@@ -31,3 +31,13 @@ export const forecastSpending = async (month) => {
         return { predicted_spending: 0 };
     }
 };
+
+export const predictCategory = async (description) => {
+    try {
+        const response = await axios.post(`${ML_URL}/predict-category`, { description });
+        return response.data;
+    } catch (error) {
+        console.error("ML predictCategory error:", error.message);
+        return { category: "Other" };
+    }
+};

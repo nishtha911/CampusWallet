@@ -3,6 +3,7 @@ import {
   classifyTransaction,
   detectAnomaly,
   forecastSpending,
+  predictCategory
 } from "../services/mlService.js";
 
 export const getTransactions = async (req, res) => {
@@ -67,6 +68,7 @@ export const createTransaction = async (req, res) => {
     res.status(201).json({
       transaction: result.rows[0],
       anomaly,
+      classification
     });
   } catch (error) {
     console.error(error);
@@ -224,4 +226,23 @@ export const getBenchmarks = async (req, res) => {
       message: "Server Error",
     });
   }
+};
+
+export const predictTransactionCategory = async (req,res)=>{
+  const {description} = req.body;
+  
+  if (!description) {
+    return res.status(400).json({
+      message: "Description is required",
+    });
+  }
+
+  try{
+    const prediction = await predictCategory(description);
+    res.status(200).json(prediction);
+  }catch(error){
+    console.error(error);
+    res.status(500).json({ message: "Server Error" });
+  }
+
 };
