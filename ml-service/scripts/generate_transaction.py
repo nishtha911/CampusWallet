@@ -6,41 +6,43 @@ transactions = []
 
 transaction_data = {
     "Food": [
-        ("Mess Lunch", False),
-        ("Groceries", False),
-        ("Pizza", True),
-        ("Burger", True),
-        ("Coffee", True)
+        ("Mess Lunch", False), ("Groceries", False), ("Pizza", True), ("Burger", True), ("Coffee", True),
+        ("Starbucks", True), ("McDonalds", True), ("Subway", True), ("Dominos", True), ("KFC", True),
+        ("Supermarket", False), ("Milk", False), ("Vegetables", False), ("Zomato", True), ("Swiggy", True),
+        ("Taco Bell", True), ("Dunkin Donuts", True), ("Canteen Snacks", True), ("Water Bottle", False),
+        ("Ice Cream", True), ("Bakery", True), ("Dining Out", True), ("Blinkit", False), ("Zepto", False)
     ],
     "Transport": [
-        ("Bus Pass", False),
-        ("Metro Card", False),
-        ("Auto Fare", False),
-        ("Train Ticket", False),
-        ("Uber Ride", True)
+        ("Bus Pass", False), ("Metro Card", False), ("Auto Fare", False), ("Train Ticket", False), ("Uber Ride", True),
+        ("Taxi", True), ("Lyft", True), ("Ola Cab", True), ("Rapido", True), ("Flight Ticket", True),
+        ("Gas", False), ("Petrol", False), ("Toll Tax", False), ("Parking", False), ("Bicycle Repair", False),
+        ("Subway Token", False), ("Local Train", False), ("Rickshaw", False), ("Car Rental", True), ("Uber Auto", False)
     ],
     "Books": [
-        ("DSA Textbook", False),
-        ("Python Book", False),
-        ("Notebook", False),
-        ("Lab Manual", False),
-        ("Stationery", False)
+        ("DSA Textbook", False), ("Python Book", False), ("Notebook", False), ("Lab Manual", False), ("Stationery", False),
+        ("Pens", False), ("Pencils", False), ("Calculator", False), ("Engineering Drawing Kit", False), ("Library Fine", False),
+        ("Novel", True), ("Fiction Book", True), ("Kindle Ebook", True), ("Magazine", True), ("Comic Book", True),
+        ("Printouts", False), ("Xerox", False), ("Highlighters", False), ("Sticky Notes", False), ("Course Material", False)
     ],
     "Entertainment": [
-        ("Movie Ticket", True),
-        ("Netflix Subscription", True),
-        ("Spotify Subscription", True),
-        ("Gaming", True),
-        ("Concert Ticket", True)
+        ("Movie Ticket", True), ("Netflix Subscription", True), ("Spotify Subscription", True), ("Gaming", True), ("Concert Ticket", True),
+        ("Amazon Prime", True), ("Disney Plus", True), ("Steam Games", True), ("Playstation Plus", True), ("Xbox Game Pass", True),
+        ("Bowling", True), ("Amusement Park", True), ("Clubbing", True), ("Party", True), ("Board Games", True),
+        ("YouTube Premium", True), ("Apple Music", True), ("Arcade", True), ("Standup Comedy", True), ("Cricket Match", True)
     ],
     "Shopping": [
-        ("Clothes", True),
-        ("Accessories", True),
-        ("Electronics", True)
+        ("Clothes", True), ("Accessories", True), ("Electronics", True),
+        ("Zara", True), ("H&M", True), ("Myntra", True), ("Amazon Shopping", True), ("Flipkart", True),
+        ("Shoes", True), ("Sneakers", True), ("Watch", True), ("Perfume", True), ("Makeup", True),
+        ("Skincare", True), ("Laptop Case", True), ("Phone Cover", True), ("Headphones", True), ("Gift", True),
+        ("Jacket", True), ("Backpack", False), ("Winter Wear", False), ("Sunglasses", True), ("Jewelry", True)
     ],
     "Fees": [
-        ("Tuition Fee", False),
-        ("Exam Fee", False)
+        ("Tuition Fee", False), ("Exam Fee", False),
+        ("Hostel Fee", False), ("Mess Fee", False), ("College Fest Pass", True), ("Registration Fee", False),
+        ("Late Fine", False), ("Library Fee", False), ("Alumni Association", False), ("Club Membership", True),
+        ("Gym Membership", True), ("Course Certification", False), ("Workshop Fee", False), ("Hackathon Entry", False),
+        ("ID Card Replacement", False), ("Transcript Fee", False), ("Placement Training", False), ("Medical Insurance", False)
     ]
 }
 

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import api from "../services/api";
+import { predictCategory } from "../services/api";
 
 function AddTransaction() {
   const navigate = useNavigate();
@@ -13,12 +14,31 @@ function AddTransaction() {
     payment_mode: "",
     date: "",
   });
+  const [confidence, setConfidence] = useState(null);
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
+  };
+
+  const handlePredictCategory = async () => {
+    if (!formData.description) {
+      alert("Please enter a description first.");
+      return;
+    }
+
+    try {
+      const response = await predictCategory(formData.description);
+      setFormData({
+        ...formData,
+        category: response.category,
+      });
+      setConfidence(response.confidence);
+    } catch (error) {
+      console.error("Category prediction error:", error);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -33,10 +53,7 @@ function AddTransaction() {
     } catch (error) {
       console.error(error);
 
-      alert(
-        error.response?.data?.message ||
-          "Failed to add transaction."
-      );
+      alert(error.response?.data?.message || "Failed to add transaction.");
     }
   };
 
@@ -73,6 +90,19 @@ function AddTransaction() {
             onChange={handleChange}
             required
           />
+
+          <br />
+          <br />
+
+          <button type="button" onClick={handlePredictCategory}>
+            Predict Category
+          </button>
+          
+          {confidence && (
+            <span style={{ marginLeft: "10px", color: confidence > 80 ? "green" : "orange", fontWeight: "bold" }}>
+            AI Prediction Confidence: {confidence}%
+            </span>
+          )}
 
           <br />
           <br />
@@ -122,9 +152,7 @@ function AddTransaction() {
           <br />
           <br />
 
-          <button type="submit">
-            Add Transaction
-          </button>
+          <button type="submit">Add Transaction</button>
         </form>
       </div>
     </>

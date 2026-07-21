@@ -14,4 +14,9 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+export const predictCategory = async (description) => {
+  const response = await api.post("/predict-category", { description });
+  return response.data;
+};
+
 export default api;

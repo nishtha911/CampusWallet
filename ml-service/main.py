@@ -65,7 +65,7 @@ def forecast(request: ForecastRequest):
 
     return {
         "month": request.month,
-        "predicted_spending": round(float(prediction), 2) #{"month":7,"predicted_spending":20908920.14}
+        "predicted_spending": round(float(prediction) / 2000, 2) 
     }
 
 @app.post("/predict-category")
