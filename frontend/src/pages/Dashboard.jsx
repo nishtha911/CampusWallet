@@ -67,49 +67,64 @@ function Dashboard() {
     <>
       <Navbar />
 
-      <div className="cards">
-        <SummaryCard title="Transactions" value={summary.totalTransactions} />
+      <div className="dashboard-container">
+        <h1 className="section-title" style={{marginTop: 0}}>Overview</h1>
+        <div className="dashboard-grid">
+          <SummaryCard title="Transactions" value={summary.totalTransactions} />
+          <SummaryCard title="Total Spending" value={`₹${summary.totalSpent}`} />
+          <SummaryCard
+            title="Largest Transaction"
+            value={`₹${insights.largest_transaction}`}
+          />
+          <SummaryCard
+            title="Forecast"
+            value={`₹${Math.round(insights.forecast_next_month)}`}
+          />
+        </div>
 
-        <SummaryCard title="Total Spending" value={`₹${summary.totalSpent}`} />
+        <div className="dashboard-grid two-cols">
+          <div>
+            <h2 className="section-title" style={{marginTop: 0}}>Insights</h2>
+            <Insights insights={insights} />
+          </div>
+          <div>
+            <h2 className="section-title" style={{marginTop: 0}}>Category Benchmarks</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th>Category</th>
+                  <th>Average</th>
+                  <th>Median</th>
+                </tr>
+              </thead>
+              <tbody>
+                {benchmarks.map((item) => (
+                  <tr key={item.category}>
+                    <td>{item.category}</td>
+                    <td>₹{item.avg_spending}</td>
+                    <td>₹{item.median_spending}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
 
-        <SummaryCard
-          title="Largest Transaction"
-          value={`₹${insights.largest_transaction}`}
-        />
-
-        <SummaryCard
-          title="Forecast"
-          value={`₹${Math.round(insights.forecast_next_month)}`}
-        />
+        <h2 className="section-title">Visualizations</h2>
+        <div className="dashboard-grid two-cols">
+          <div className="minimal-card">
+            <PieChart transactions={transactions} />
+          </div>
+          <div className="minimal-card">
+            <BarChart transactions={transactions} />
+          </div>
+        </div>
+        <div className="dashboard-grid">
+          <div className="minimal-card">
+             <LineChart transactions={transactions} />
+          </div>
+        </div>
       </div>
-
-      <Insights insights={insights} />
-
-      <h2>Category Benchmarks</h2>
-
-      <table>
-        <thead>
-          <tr>
-            <th>Category</th>
-            <th>Average</th>
-            <th>Median</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {benchmarks.map((item) => (
-            <tr key={item.category}>
-              <td>{item.category}</td>
-              <td>₹{item.avg_spending}</td>
-              <td>₹{item.median_spending}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      <PieChart transactions={transactions} />
-      <BarChart transactions={transactions} />
-      <LineChart transactions={transactions} />
     </>
   );
 }

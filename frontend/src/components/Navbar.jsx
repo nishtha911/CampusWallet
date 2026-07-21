@@ -11,29 +11,15 @@ function Navbar() {
   };
 
   return (
-    <nav
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        padding: "15px 30px",
-        borderBottom: "1px solid #ddd",
-      }}
-    >
-      <h2>CampusWallet</h2>
-
-      <div
-        style={{
-          display: "flex",
-          gap: "15px",
-        }}
-      >
+    <nav className="nav-bar">
+      <h2 style={{ display: "flex", alignItems: "center", gap: "8px", margin: 0 }}>
+      CampusWallet
+      </h2>
+      
+      <div className="nav-links">
         <Link to="/dashboard">Dashboard</Link>
-
         <Link to="/add-transaction">Add Transaction</Link>
-
         <Link to="/transactions">Transactions</Link>
-
         <button onClick={logout}>Logout</button>
       </div>
     </nav>

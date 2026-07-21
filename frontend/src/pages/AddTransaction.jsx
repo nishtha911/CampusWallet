@@ -61,16 +61,15 @@ function AddTransaction() {
     <>
       <Navbar />
 
-      <div
-        style={{
-          maxWidth: "500px",
-          margin: "40px auto",
-        }}
-      >
-        <h1>Add Transaction</h1>
+      <div className="center-container">
+        <form className="form" onSubmit={handleSubmit}>
+          <div className="title">
+            Add Transaction
+            <span>Log a new expense</span>
+          </div>
 
-        <form onSubmit={handleSubmit}>
           <input
+            className="input"
             type="number"
             name="amount"
             placeholder="Amount"
@@ -79,10 +78,8 @@ function AddTransaction() {
             required
           />
 
-          <br />
-          <br />
-
           <input
+            className="input"
             type="text"
             name="description"
             placeholder="Description"
@@ -91,10 +88,7 @@ function AddTransaction() {
             required
           />
 
-          <br />
-          <br />
-
-          <button type="button" onClick={handlePredictCategory}>
+          <button className="button-confirm" style={{margin: "10px auto"}} type="button" onClick={handlePredictCategory}>
             Predict Category
           </button>
           
@@ -104,10 +98,8 @@ function AddTransaction() {
             </span>
           )}
 
-          <br />
-          <br />
-
           <select
+            className="input"
             name="category"
             value={formData.category}
             onChange={handleChange}
@@ -122,10 +114,8 @@ function AddTransaction() {
             <option value="Fees">Fees</option>
           </select>
 
-          <br />
-          <br />
-
           <select
+            className="input"
             name="payment_mode"
             value={formData.payment_mode}
             onChange={handleChange}
@@ -138,10 +128,8 @@ function AddTransaction() {
             <option value="Net Banking">Net Banking</option>
           </select>
 
-          <br />
-          <br />
-
           <input
+            className="input"
             type="date"
             name="date"
             value={formData.date}
@@ -149,10 +137,7 @@ function AddTransaction() {
             required
           />
 
-          <br />
-          <br />
-
-          <button type="submit">Add Transaction</button>
+          <button className="button-confirm" type="submit">Add Transaction</button>
         </form>
       </div>
     </>

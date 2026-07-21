@@ -38,11 +38,15 @@ function Register() {
   };
 
   return (
-    <div className="register-container">
-      <h1>Create Account</h1>
+    <div className="center-container">
+      <form className="form" onSubmit={handleSubmit}>
+        <div className="title">
+          Create Account
+          <span>Join CampusWallet today</span>
+        </div>
 
-      <form onSubmit={handleSubmit}>
         <input
+          className="input"
           type="text"
           name="name"
           placeholder="Full Name"
@@ -51,6 +55,7 @@ function Register() {
         />
 
         <input
+          className="input"
           type="email"
           name="email"
           placeholder="Email"
@@ -59,6 +64,7 @@ function Register() {
         />
 
         <input
+          className="input"
           type="password"
           name="password"
           placeholder="Password"
@@ -66,13 +72,15 @@ function Register() {
           onChange={handleChange}
         />
 
-        <button type="submit">Register</button>
-      </form>
+        <button className="button-confirm" type="submit">
+          Register
+        </button>
 
-      <p>
-        Already have an account?
-        <Link to="/"> Login</Link>
-      </p>
+        <p className="form-footer">
+          Already have an account?
+          <Link to="/">Login</Link>
+        </p>
+      </form>
     </div>
   );
 }

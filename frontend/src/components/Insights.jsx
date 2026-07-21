@@ -1,14 +1,6 @@
 function Insights({ insights }) {
-
   return (
-    <div
-      style={{
-        border: "1px solid #ddd",
-        borderRadius: "10px",
-        padding: "20px",
-        margin: "30px 0",
-      }}
-    >
+    <div className="minimal-card">
       <h2>AI Financial Insights</h2>
 
       <p>

@@ -66,19 +66,21 @@ function Transactions() {
     <>
       <Navbar />
 
-      <div className="container">
-        <h1>My Transactions</h1>
+      <div className="dashboard-container">
+        <h1 className="section-title" style={{marginTop: 0}}>My Transactions</h1>
 
-        <div className="transactions-controls">
+        <div className="transactions-controls" style={{display: 'flex', gap: '15px', marginBottom: '30px', flexWrap: 'wrap'}}>
           <input
             type="text"
-            className="search-input"
+            className="input"
+            style={{flex: 1, minWidth: '200px'}}
             placeholder="Search descriptions or categories..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
           <select 
-            className="sort-select" 
+            className="input" 
+            style={{width: 'auto'}}
             value={sortBy} 
             onChange={(e) => setSortBy(e.target.value)}
           >
@@ -87,7 +89,8 @@ function Transactions() {
             <option value="category">Category</option>
           </select>
           <select 
-            className="sort-select" 
+            className="input" 
+            style={{width: 'auto'}}
             value={order} 
             onChange={(e) => setOrder(e.target.value)}
           >
@@ -122,11 +125,11 @@ function Transactions() {
                 <td>₹{transaction.amount}</td>
 
                 <td>
-                  <button onClick={() => editTransaction(transaction)}>
+                  <button className="btn-small" onClick={() => editTransaction(transaction)}>
                     Edit
                   </button>
 
-                  <button onClick={() => deleteTransaction(transaction.id)}>
+                  <button className="btn-small danger" onClick={() => deleteTransaction(transaction.id)}>
                     Delete
                   </button>
                 </td>

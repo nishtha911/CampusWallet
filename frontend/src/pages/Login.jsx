@@ -42,11 +42,15 @@ function Login() {
   };
 
   return (
-    <div className="login-container">
-      <h1>Login</h1>
+    <div className="center-container">
+      <form className="form" onSubmit={handleSubmit}>
+        <div className="title">
+          Login
+          <span>Welcome back to CampusWallet</span>
+        </div>
 
-      <form onSubmit={handleSubmit}>
         <input
+          className="input"
           type="email"
           name="email"
           placeholder="Email"
@@ -55,6 +59,7 @@ function Login() {
         />
 
         <input
+          className="input"
           type="password"
           name="password"
           placeholder="Password"
@@ -62,13 +67,13 @@ function Login() {
           onChange={handleChange}
         />
 
-        <button type="submit">
+        <button className="button-confirm" type="submit">
           Login
         </button>
 
-        <p>
+        <p className="form-footer">
           Don't have an account?
-          <Link to="/register"> Register</Link>
+          <Link to="/register">Register</Link>
         </p>
       </form>
     </div>
