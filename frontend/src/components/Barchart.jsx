@@ -41,7 +41,15 @@ function BarChart({ transactions }) {
       {
         label: "Monthly Spending",
         data: Object.values(monthlyTotals),
-        backgroundColor: "#1a1a1a",
+        backgroundColor: [
+          "#ff6b6b",
+          "#feca57",
+          "#1dd1a1",
+          "#5f27cd",
+          "#54a0ff",
+          "#ff9ff3",
+          "#c8d6e5"
+        ],
         borderWidth: 1,
       },
     ],

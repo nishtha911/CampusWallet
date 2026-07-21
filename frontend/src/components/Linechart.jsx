@@ -43,8 +43,8 @@ function LineChart({ transactions }) {
       {
         label: "Spending Trend",
         data: Object.values(monthlyTotals),
-        borderColor: "#1a1a1a",
-        backgroundColor: "rgba(26, 26, 26, 0.1)",
+        borderColor: "#5f27cd",
+        backgroundColor: "rgba(95, 39, 205, 0.2)",
         tension: 0.4,
         fill: true,
       },
