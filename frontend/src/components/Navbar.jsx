@@ -12,8 +12,8 @@ function Navbar() {
 
   return (
     <nav className="nav-bar">
-      <h2 style={{ display: "flex", alignItems: "center", gap: "8px", margin: 0}}>
-        <img src="/image.png" alt="CampusWallet Icon" style={{ width: "32px", height: "32px" }} />
+      <h2 style={{ display: "flex", alignItems: "center", gap: "10px", margin: 0 }}>
+        <img src="/image.png" alt="CampusWallet" style={{ width: "30px", height: "30px" }} />
         CampusWallet
       </h2>
       

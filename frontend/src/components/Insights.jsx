@@ -1,95 +1,87 @@
 function Insights({ insights }) {
   return (
     <div className="minimal-card">
-      <h2>AI Financial Insights</h2>
+      <h3 style={{ fontSize: "16px", fontWeight: 900, marginBottom: "16px" }}>
+        Financial Summary
+      </h3>
 
-      <p>
-        <strong>Total Spending:</strong>
-        ₹{insights.total_spending}
-      </p>
-
-      <p>
-        <strong>Largest Transaction:</strong>
-        ₹{insights.largest_transaction}
-      </p>
-
-      <p>
-        <strong>Needs:</strong>
-        {insights.need_transactions}
-      </p>
-
-      <p>
-        <strong>Wants:</strong>
-        {insights.want_transactions}
-      </p>
-
-      <p>
-        <strong>Predicted Next Month:</strong>
-        ₹{Math.round(insights.forecast_next_month)}
-      </p>
-
-      <hr />
-
-      <h3>Intelligent Finance Insights</h3>
-      
-      <div>
-        {insights.intelligent_insights && typeof insights.intelligent_insights === "object" ? (
-          <ul>
-            <li style={{ marginBottom: "10px" }}>
-              <strong>Spending Recommendation:</strong> {insights.intelligent_insights.recommendation}
-            </li>
-            <li style={{ marginBottom: "10px" }}>
-              <strong>Anomaly Observation:</strong> {insights.intelligent_insights.anomaly}
-            </li>
-            <li style={{ marginBottom: "10px" }}>
-              <strong>Forecast Reasoning:</strong> {insights.intelligent_insights.forecast}
-            </li>
-          </ul>
-        ) : (
-          <p style={{ whiteSpace: "pre-wrap", lineHeight: "1.5" }}>
-            {typeof insights.intelligent_insights === "string" ? insights.intelligent_insights : "Loading insights..."}
-          </p>
-        )}
+      <div className="insights-stats">
+        <div className="insights-stat-item">
+          <span>Total Spending</span>
+          <span>₹{insights.total_spending}</span>
+        </div>
+        <div className="insights-stat-item">
+          <span>Largest Transaction</span>
+          <span>₹{insights.largest_transaction}</span>
+        </div>
+        <div className="insights-stat-item">
+          <span>Needs</span>
+          <span>{insights.need_transactions}</span>
+        </div>
+        <div className="insights-stat-item">
+          <span>Wants</span>
+          <span>{insights.want_transactions}</span>
+        </div>
+        <div className="insights-stat-item">
+          <span>Predicted Next Month</span>
+          <span>₹{Math.round(insights.forecast_next_month)}</span>
+        </div>
       </div>
 
-      <hr />
+      {insights.intelligent_insights && typeof insights.intelligent_insights === "object" && (
+        <>
+          <hr className="insights-divider" />
+          <h3 style={{ fontSize: "14px", fontWeight: 800, marginBottom: "12px", textTransform: "uppercase", letterSpacing: "0.7px", color: "#555" }}>
+            AI Analysis
+          </h3>
+          <div className="insights-ai-block">
+            {insights.intelligent_insights.recommendation && (
+              <div className="insights-ai-item">
+                <strong>Recommendation</strong>
+                <p>{insights.intelligent_insights.recommendation}</p>
+              </div>
+            )}
+            {insights.intelligent_insights.anomaly && (
+              <div className="insights-ai-item">
+                <strong>Anomaly</strong>
+                <p>{insights.intelligent_insights.anomaly}</p>
+              </div>
+            )}
+            {insights.intelligent_insights.forecast && (
+              <div className="insights-ai-item">
+                <strong>Forecast</strong>
+                <p>{insights.intelligent_insights.forecast}</p>
+              </div>
+            )}
+          </div>
+        </>
+      )}
 
-      <h3>Basic Suggestions</h3>
+      {typeof insights.intelligent_insights === "string" && (
+        <>
+          <hr className="insights-divider" />
+          <p style={{ whiteSpace: "pre-wrap", lineHeight: "1.6", fontSize: "13px", color: "#333" }}>
+            {insights.intelligent_insights}
+          </p>
+        </>
+      )}
 
-      <ul>
-
-        {insights.want_transactions >
-        insights.need_transactions ? (
-          <li>
-            You are spending more on wants than
-            needs.
-          </li>
+      <hr className="insights-divider" />
+      <ul className="insights-suggestions">
+        {insights.want_transactions > insights.need_transactions ? (
+          <li>You are spending more on wants than needs.</li>
         ) : (
-          <li>
-            Your spending pattern looks balanced.
-          </li>
+          <li>Your spending pattern looks balanced.</li>
         )}
-
         {insights.largest_transaction > 10000 && (
-          <li>
-            One unusually large transaction was
-            detected.
-          </li>
+          <li>One unusually large transaction was detected.</li>
         )}
-
-        {insights.forecast_next_month >
-          insights.total_spending && (
-          <li>
-            Spending is predicted to increase next
-            month.
-          </li>
+        {insights.forecast_next_month > insights.total_spending && (
+          <li>Spending is predicted to increase next month.</li>
         )}
-
       </ul>
-
     </div>
   );
-
 }
 
 export default Insights;
