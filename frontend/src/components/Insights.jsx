@@ -38,7 +38,31 @@ function Insights({ insights }) {
 
       <hr />
 
-      <h3>Suggestions</h3>
+      <h3>Intelligent Finance Insights</h3>
+      
+      <div>
+        {insights.intelligent_insights && typeof insights.intelligent_insights === "object" ? (
+          <ul>
+            <li style={{ marginBottom: "10px" }}>
+              <strong>Spending Recommendation:</strong> {insights.intelligent_insights.recommendation}
+            </li>
+            <li style={{ marginBottom: "10px" }}>
+              <strong>Anomaly Observation:</strong> {insights.intelligent_insights.anomaly}
+            </li>
+            <li style={{ marginBottom: "10px" }}>
+              <strong>Forecast Reasoning:</strong> {insights.intelligent_insights.forecast}
+            </li>
+          </ul>
+        ) : (
+          <p style={{ whiteSpace: "pre-wrap", lineHeight: "1.5" }}>
+            {typeof insights.intelligent_insights === "string" ? insights.intelligent_insights : "Loading insights..."}
+          </p>
+        )}
+      </div>
+
+      <hr />
+
+      <h3>Basic Suggestions</h3>
 
       <ul>
 

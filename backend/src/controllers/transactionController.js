@@ -1,4 +1,5 @@
 import pool from "../config/db.js";
+import Groq from "groq-sdk";
 import {
   classifyTransaction,
   detectAnomaly,
@@ -187,6 +188,43 @@ export const getInsights = async (req, res) => {
 
     const forecast = await forecastSpending(month);
 
+    let intelligent_insights = "Please set your GROQ_API_KEY to see intelligent insights!";
+    
+    if (process.env.GROQ_API_KEY) {
+      const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+      const prompt = `You are an AI financial advisor for a college student. Here is their spending data for the month:
+      - Total Spent: ₹${totalSpending}
+      - Needs: ${needTransactions} transactions
+      - Wants: ${wantTransactions} transactions
+      - Largest Single Expense: ₹${largestTransaction}
+      - AI Forecast for next month: ₹${forecast.predicted_spending}
+      
+      Write a highly concise summary providing:
+      1. One spending recommendation (based on the wants/needs ratio).
+      2. One anomaly observation (mentioning the largest expense).
+      3. One prediction reasoning (explaining why next month's forecast is what it is).
+      
+      You must respond in strict JSON format with exactly these three keys:
+      {
+        "recommendation": "your concise recommendation",
+        "anomaly": "your concise anomaly observation",
+        "forecast": "your concise forecast reasoning"
+      }
+      Do not include any asterisks or markdown formatting in the text values.`;
+
+      try {
+        const chatCompletion = await groq.chat.completions.create({
+          messages: [{ role: "user", content: prompt }],
+          model: "llama-3.1-8b-instant",
+          response_format: { type: "json_object" }
+        });
+        intelligent_insights = JSON.parse(chatCompletion.choices[0]?.message?.content || "{}");
+      } catch (err) {
+        console.error("Groq API Error:", err);
+        intelligent_insights = "Error connecting to Groq AI.";
+      }
+    }
+
     res.status(200).json({
       total_transactions: totalTransactions,
       total_spending: totalSpending,
@@ -194,6 +232,7 @@ export const getInsights = async (req, res) => {
       need_transactions: needTransactions,
       largest_transaction: largestTransaction,
       forecast_next_month: forecast.predicted_spending,
+      intelligent_insights: intelligent_insights
     });
   } catch (error) {
     console.error(error);
