@@ -20,11 +20,11 @@ ChartJS.register(
 );
 
 function LineChart({ transactions }) {
+  const sortedTransactions = [...transactions].sort((a, b) => new Date(a.date) - new Date(b.date));
 
   const monthlyTotals = {};
 
-  transactions.forEach((transaction) => {
-
+  sortedTransactions.forEach((transaction) => {
     const month = new Date(transaction.date)
       .toLocaleString("default", {
         month: "short",
@@ -35,46 +35,28 @@ function LineChart({ transactions }) {
     }
 
     monthlyTotals[month] += Number(transaction.amount);
-
   });
 
   const data = {
-
     labels: Object.keys(monthlyTotals),
-
     datasets: [
-
       {
-
         label: "Spending Trend",
-
         data: Object.values(monthlyTotals),
-
+        borderColor: "#1a1a1a",
+        backgroundColor: "rgba(26, 26, 26, 0.1)",
         tension: 0.4,
-
+        fill: true,
       },
-
     ],
-
   };
 
   return (
-
-    <div
-      style={{
-        width: "700px",
-        margin: "40px auto",
-      }}
-    >
-
+    <div style={{ width: "100%" }}>
       <h2>Spending Trend</h2>
-
       <Line data={data} />
-
     </div>
-
   );
-
 }
 
 export default LineChart;

@@ -18,11 +18,11 @@ ChartJS.register(
 );
 
 function BarChart({ transactions }) {
+  const sortedTransactions = [...transactions].sort((a, b) => new Date(a.date) - new Date(b.date));
 
   const monthlyTotals = {};
 
-  transactions.forEach((transaction) => {
-
+  sortedTransactions.forEach((transaction) => {
     const month = new Date(transaction.date)
       .toLocaleString("default", {
         month: "short",
@@ -33,43 +33,26 @@ function BarChart({ transactions }) {
     }
 
     monthlyTotals[month] += Number(transaction.amount);
-
   });
 
   const data = {
-
     labels: Object.keys(monthlyTotals),
-
     datasets: [
-
       {
         label: "Monthly Spending",
-
         data: Object.values(monthlyTotals),
-
+        backgroundColor: "#1a1a1a",
+        borderWidth: 1,
       },
-
     ],
-
   };
 
   return (
-
-    <div
-      style={{
-        width: "700px",
-        margin: "40px auto",
-      }}
-    >
-
+    <div style={{ width: "100%" }}>
       <h2>Monthly Spending</h2>
-
       <Bar data={data} />
-
     </div>
-
   );
-
 }
 
 export default BarChart;

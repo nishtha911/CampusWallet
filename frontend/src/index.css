@@ -1,5 +1,3 @@
-/* Base styles and Uiverse.io form theme */
-
 * {
   box-sizing: border-box;
   margin: 0;
@@ -8,32 +6,32 @@
 }
 
 body {
-  background-color: #f4f7f6;
-  color: #333;
+  /* Main background behind everything (Dashboard, Navbar, etc.) */
+  background-color: #cbfff9; 
+  /* Main text color for standard text */
+  color: #333; 
 }
 
-/* 
-  How to center a div:
-  We use Flexbox on the parent container.
-  - display: flex (turns it into a flex container)
-  - justify-content: center (centers horizontally)
-  - align-items: center (centers vertically)
-  - min-height: 100vh (makes sure the container takes up the full screen height so vertical centering works)
-*/
 .center-container {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #e0e7ff; /* subtle background */
+  /* Background color strictly behind the Login and Register cards */
+  background: linear-gradient(to right, #b5fffa, #cbfff9);   
 }
 
 .form {
-  --input-focus: #2d8cf0;
-  --font-color: #323232;
-  --font-color-sub: #666;
-  --bg-color: #ffffff;
-  --main-color: #1a1a1a;
+  /* Color of the input border when you click to type */
+  --input-focus: #00ffee; 
+  /* Main text color inside the Login/Register/Add Transaction forms */
+  --font-color: #000000; 
+  /* Color for placeholders and subtitles in forms */
+  --font-color-sub: #000000; 
+  /* Background color specifically behind the Login, Register, and Add Transaction forms */
+  --bg-color: #0aa79c; 
+  /* Main accent color used for form borders, shadows, and the main submit button */
+  --main-color: #1a1a1a; 
   
   padding: 40px;
   background: var(--bg-color);
@@ -75,7 +73,8 @@ body {
   height: 45px;
   border-radius: 5px;
   border: 2px solid var(--main-color);
-  background-color: #f9f9f9;
+  /* Background color inside the input boxes */
+  background-color: #f9f9f9; 
   box-shadow: 4px 4px var(--main-color);
   font-size: 15px;
   font-weight: 600;
@@ -102,11 +101,13 @@ body {
   height: 45px;
   border-radius: 5px;
   border: 2px solid var(--main-color);
-  background-color: var(--main-color);
+  /* Background color of large submit buttons (Login, Register, Add Transaction) */
+  background-color: var(--main-color); 
   box-shadow: 4px 4px var(--main-color);
   font-size: 17px;
   font-weight: 600;
-  color: #fff;
+  /* Text color inside large submit buttons */
+  color: #fff; 
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -125,7 +126,8 @@ body {
 }
 
 .form-footer a {
-  color: var(--input-focus);
+  /* Link color in the form footers (e.g., 'Register here') */
+  color: var(--input-focus); 
   font-weight: 600;
   text-decoration: none;
   margin-left: 5px;
@@ -138,7 +140,7 @@ body {
 /* Dashboard Layout & Neo-Brutalist Classes */
 
 .dashboard-container {
-  padding: 20px;
+  padding: 20px 40px;
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -160,9 +162,12 @@ body {
 }
 
 .minimal-card {
-  background-color: #ffffff;
-  border: 2px solid #1a1a1a;
-  box-shadow: 6px 6px #1a1a1a;
+  /* Background color for cards on the Dashboard (e.g., Overview, Insights, Charts) */
+  background-color: #e2ffff; 
+  /* Border color for Dashboard cards */
+  border: 2px solid #1a1a1a; 
+  /* Shadow color for Dashboard cards */
+  box-shadow: 6px 6px #1a1a1a; 
   border-radius: 8px;
   padding: 20px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -170,11 +175,13 @@ body {
 
 .minimal-card:hover {
   transform: translate(-2px, -2px);
-  box-shadow: 8px 8px #1a1a1a;
+  /* Shadow color on hover for Dashboard cards */
+  box-shadow: 8px 8px #1a1a1a; 
 }
 
 .minimal-card h4 {
-  color: #666;
+  /* Subtitle color inside Dashboard cards */
+  color: #666; 
   font-size: 14px;
   margin-bottom: 10px;
   text-transform: uppercase;
@@ -182,7 +189,8 @@ body {
 }
 
 .minimal-card h2 {
-  color: #1a1a1a;
+  /* Value/Main text color inside Dashboard cards */
+  color: #1a1a1a; 
   font-size: 28px;
   font-weight: 900;
 }
@@ -191,15 +199,18 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 30px;
-  background-color: #ffffff;
-  border-bottom: 2px solid #1a1a1a;
+  padding: 15px 40px;
+  /* Navbar background color */
+  background-color: #004c47; 
+  /* Navbar bottom border color */
+  border-bottom: 2px solid #1a1a1a; 
   margin-bottom: 20px;
 }
 
 .nav-bar h2 {
   font-weight: 900;
-  color: #1a1a1a;
+  /* CampusWallet logo text color */
+  color: #ffffff; 
   margin: 0;
 }
 
@@ -211,7 +222,8 @@ body {
 
 .nav-links a {
   text-decoration: none;
-  color: #1a1a1a;
+  /* Text color for Navbar links */
+  color: #ffffff; 
   font-weight: 600;
   padding: 5px 10px;
   border: 2px solid transparent;
@@ -219,18 +231,23 @@ body {
 }
 
 .nav-links a:hover {
-  border-bottom: 2px solid #1a1a1a;
+  /* Border color under Navbar links on hover */
+  border-bottom: 2px solid #1a1a1a; 
 }
 
 .nav-links button {
-  background-color: #1a1a1a;
-  color: white;
-  border: 2px solid #1a1a1a;
+  /* Background color for Navbar Logout button */
+  background-color: #06beb1; 
+  /* Text color for Navbar Logout button */
+  color: rgb(0, 0, 0); 
+  /* Border color for Navbar Logout button */
+  border: 2px solid #1a1a1a; 
   padding: 8px 16px;
   border-radius: 5px;
   font-weight: 600;
   cursor: pointer;
-  box-shadow: 3px 3px 0px 0px rgba(0,0,0,0.2);
+  /* Shadow color for Navbar Logout button */
+  box-shadow: 3px 3px 0px 0px rgba(0,0,0,0.2); 
   transition: all 0.2s;
 }
 
@@ -241,13 +258,17 @@ body {
 
 /* Tables */
 table {
+  /* Width of tables */
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
   margin-bottom: 30px;
-  background-color: #fff;
-  border: 2px solid #1a1a1a;
-  box-shadow: 6px 6px #1a1a1a;
+  /* Background color of tables (Benchmarks and Transactions) */
+  background-color: #fff; 
+  /* Border color of tables */
+  border: 2px solid #1a1a1a; 
+  /* Shadow color of tables */
+  box-shadow: 6px 6px #1a1a1a; 
   border-radius: 8px;
   overflow: hidden;
 }
@@ -255,20 +276,24 @@ table {
 th, td {
   padding: 15px;
   text-align: left;
-  border-bottom: 2px solid #1a1a1a;
+  /* Bottom border color separating table rows */
+  border-bottom: 2px solid #1a1a1a; 
 }
 
 th {
-  background-color: #f9f9f9;
+  /* Background color of table headers */
+  background-color: #f9f9f9; 
   font-weight: 900;
-  border-right: 2px solid #1a1a1a;
+  /* Right border color separating table header columns */
+  border-right: 2px solid #1a1a1a; 
 }
 th:last-child {
   border-right: none;
 }
 
 td {
-  border-right: 2px solid #1a1a1a;
+  /* Right border color separating table data columns */
+  border-right: 2px solid #1a1a1a; 
 }
 td:last-child {
   border-right: none;
@@ -283,18 +308,23 @@ tbody tr:last-child td {
   font-weight: 900;
   margin-bottom: 20px;
   margin-top: 40px;
-  color: #1a1a1a;
+  /* Text color for Section Titles (e.g., 'Overview', 'Visualizations') */
+  color: #1a1a1a; 
 }
 
 .btn-small {
-  background-color: #1a1a1a;
-  color: white;
-  border: 2px solid #1a1a1a;
+  /* Background color of small buttons (e.g., 'Edit' in Transactions) */
+  background-color: #1a1a1a; 
+  /* Text color of small buttons */
+  color: white; 
+  /* Border color of small buttons */
+  border: 2px solid #1a1a1a; 
   padding: 6px 12px;
   border-radius: 5px;
   font-weight: 600;
   cursor: pointer;
-  box-shadow: 3px 3px 0px 0px rgba(0,0,0,1);
+  /* Shadow color of small buttons */
+  box-shadow: 3px 3px 0px 0px rgba(0,0,0,1); 
   transition: all 0.2s;
   margin-right: 8px;
 }
@@ -304,6 +334,8 @@ tbody tr:last-child td {
   box-shadow: 0px 0px 0px 0px rgba(0,0,0,1);
 }
 .btn-small.danger {
-  background-color: #ff4757;
-  color: white;
+  /* Background color of small danger buttons (e.g., 'Delete' in Transactions) */
+  background-color: #ff4757; 
+  /* Text color of small danger buttons */
+  color: white; 
 }
