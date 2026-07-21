@@ -2,3 +2,4 @@
 implementation_plan.md
 .vscode
 venv/
+frontend/.env.production
